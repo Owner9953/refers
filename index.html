@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Referral Links</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366F1;
+            --primary-light: #818CF8;
+            --dark: #1E293B;
+            --light: #F8FAFC;
+            --gray: #CBD5E1;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        p.subtitle {
+            font-size: 1.1rem;
+            color: #64748B;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .links-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .referral-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: transform 0.5s ease-out, opacity 0.5s ease-out, box-shadow 0.2s;
+        }
+        
+        .referral-card.fade-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .referral-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary-light);
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .card-description {
+            color: #64748B;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+        
+        .card-button {
+            display: inline-block;
+            padding: 0.7rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        
+        .card-button:hover {
+            background: var(--primary-light);
+        }
+        
+        .theme-toggle {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.25rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--primary-light);
+        }
+
+        .dark-theme {
+            background-color: var(--dark);
+            color: var(--light);
+        }
+
+        .dark-theme .referral-card {
+            background-color: #334155;
+            color: var(--light);
+            box-shadow: 0 4px 6px -1px rgba(255, 255, 255, 0.1);
+        }
+
+        .dark-theme .referral-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(255, 255, 255, 0.1);
+        }
+
+        .dark-theme .card-description {
+            color: #CBD5E1;
+        }
+
+        .dark-theme .card-button {
+            background-color: var(--primary-light);
+        }
+
+        .dark-theme .card-button:hover {
+            background-color: var(--primary);
+        }
+
+        .profile-button {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.25rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            animation: pulse-animation 2s infinite;
+        }
+
+        .profile-button:hover {
+            background-color: var(--primary-light);
+            transform: scale(1.05);
+            animation-play-state: paused; /* Stop pulse on hover */
+        }
+
+        @keyframes pulse-animation {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.05);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Loading animation styles */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--light); /* Match body background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000; /* Ensure it's on top */
+            opacity: 1;
+            transition: opacity 0.5s ease-out;
+        }
+
+        .dark-theme .loading-overlay {
+            background-color: var(--dark); /* Match dark body background */
+        }
+
+        .loading-overlay.fade-out {
+            opacity: 0;
+            pointer-events: none; /* Make it non-interactive after fade out */
+        }
+
+        .loader {
+            border: 8px solid var(--gray); /* Light gray border */
+            border-top: 8px solid var(--primary); /* Primary color loading bar */
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="dark-theme">
+
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loader"></div>
+    </div>
+
+    <div class="container" style="opacity: 0;" id="contentContainer">
+        <header>
+            <h1>My Referral Links</h1>
+            <p class="subtitle">These are the services I recommend and would love for you to check out using my referral links. Thank you for your support!</p>
+        </header>
+
+        <div class="links-container" id="linksContainer">
+            <!-- Example referral card - you can duplicate this structure and customize it -->
+            <div class="referral-card" style="animation-delay: 0.1s;">
+                <div class="card-header">
+                    <div class="card-icon">R</div>
+                    <div class="card-title">Recraft AI</div>
+                </div>
+                <p class="card-description">Get free 200 Credits.<br>Only with my Link!</p>
+                <a href="https://www.recraft.ai/invite/67AiE4JvSE" target="_blank" class="card-button">Use My Link</a>
+            </div>
+
+            <div class="referral-card" style="animation-delay: 0.2s;">
+                <div class="card-header">
+                    <div class="card-icon">K</div>
+                    <div class="card-title">Komiko AI</div>
+                </div>
+                <p class="card-description">Get free 200 ZAPs.<br>Only with my Link!</p>
+                <a href="https://komiko.app?ref=EWY9K" target="_blank" class="card-button">Use My Link</a>
+            </div>
+<!--
+            <div class="referral-card" style="animation-delay: 0.3s;">
+                <div class="card-header">
+                    <div class="card-icon">D</div>
+                    <div class="card-title">DoorDash</div>
+                </div>
+                <p class="card-description">Get $10 off your first order of $15 or more with DoorDash.</p>
+                <a href="https://www.doordash.com/" target="_blank" class="card-button">Use My Link</a>
+            </div>
+
+            <div class="referral-card" style="animation-delay: 0.4s;">
+                <div class="card-header">
+                    <div class="card-icon">H</div>
+                    <div class="card-title">HelloFresh</div>
+                </div>
+                <p class="card-description">Get a free box and 15% off for 3 months when you sign up for HelloFresh.</p>
+                <a href="https://www.hellofresh.com/" target="_blank" class="card-button">Use My Link</a>
+            </div>
+
+            <div class="referral-card" style="animation-delay: 0.5s;">
+                <div class="card-header">
+                    <div class="card-icon">R</div>
+                    <div class="card-title">Robinhood</div>
+                </div>
+                <p class="card-description">Get a free stock when you sign up and fund your Robinhood account.</p>
+                <a href="https://www.robinhood.com/" target="_blank" class="card-button">Use My Link</a>
+            </div>
+
+            <div class="referral-card" style="animation-delay: 0.6s;">
+                <div class="card-header">
+                    <div class="card-icon">A</div>
+                    <div class="card-title">Airbnb</div>
+                </div>
+                <p class="card-description">Get $25 off your first stay when you sign up with my Airbnb link.</p>
+                <a href="https://www.airbnb.com/" target="_blank" class="card-button">Use My Link</a>
+            </div>
+        </div>
+    </div>
+-->
+    <button id="themeToggleButton" class="theme-toggle">Light Theme</button>
+    <a href="https://eer.su/Owner" target="_blank" class="profile-button">
+        Profile
+    </a>
+
+    <script>
+        const themeToggleButton = document.getElementById('themeToggleButton');
+        const body = document.body;
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const contentContainer = document.getElementById('contentContainer');
+        const referralCards = document.querySelectorAll('.referral-card');
+        const initialTheme = localStorage.getItem('theme') || 'dark-theme';
+
+        themeToggleButton.addEventListener('click', () => {
+            body.classList.toggle('dark-theme');
+            if (body.classList.contains('dark-theme')) {
+                themeToggleButton.textContent = 'Light Theme';
+            } else {
+                themeToggleButton.textContent = 'Dark Theme';
+            }
+        });
+
+        window.addEventListener('load', () => {
+            // Fade out loading overlay
+            loadingOverlay.classList.add('fade-out');
+            setTimeout(() => {
+                loadingOverlay.style.display = 'none';
+                contentContainer.style.opacity = 1; // Fade in content
+
+                 // Animate referral cards
+                referralCards.forEach(card => {
+                    card.classList.add('fade-in');
+                });
+            }, 500); // Delay to match fade-out transition
+        });
+    </script>
+</body>
+</html>
